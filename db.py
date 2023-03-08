@@ -8,29 +8,25 @@ from threading import Thread
 from datetime import datetime
 from colorama import Fore, init, Back
 
+
+
+
+
 SERVER_HOST = "170.187.241.20"
 SERVER_PORT = 5002
 separator_token = "<SEP>"
 
-
-
-
-    
-
-
-
-
-def USER_POST(first_name, last_name, phone_num, password, ipaddress_client, user_name):
-    SQL_CRED("INSERT INTO users (first_name, last_name, phone_num, password, ipaddress_client, user_name) VALUES (%s, %s, %s, %s, %s, %s)", 
-    ('' + first_name + '', '' + last_name + '', '' + phone_num + '', '' + password + '', '' + ipaddress_client + '', '' + user_name + ''))
-    print("Welcome "+first_name+", to this messaging application!! Have fun!!")
+def USER_POST(username,firstname,lastname,email,phone_num,ip_addr,passwd):
+    SQL_CRED("INSERT INTO USERS (username,firstname,lastname,email,phone_num,ip_addr,passwd) VALUES (%s, %s, %s, %s, %s, %s, %s)", 
+    ('' + username + '', '' + firstname + '', '' + lastname + '', '' + email + '', '' + phone_num + '', '' + ip_addr + '', '' + passwd))
+    print("Welcome "+firstname+", to this messaging application!! Have fun!!")
 
 def SQL_CRED(sql, val):
     mydb = mysql.connector.connect(
 	host = "sql12.freemysqlhosting.net",
-	user = "sql12601298",
-	password = "PBE2mmJPax",
-	database="sql12601298")
+	user = "sql12603798",
+	password = "FH2C6SMWLs",
+	database="sql12603798")
     mycursor = mydb.cursor()
     mycursor.execute(sql, val)
     mydb.commit()
@@ -58,13 +54,18 @@ print("[+] Connected.")
 user_input = input("Login(L)/Signup(S):")
 if (user_input == "S" or user_input == "s"):
 
-    first_name = input("Enter your First Name: ")
-    last_name = input("Enter your Last Name:")
+
+
+    username = input("Enter your Username: ")
+    firstname = input("Enter your First Name: ")
+    lastname = input("Enter your Last Name:")
+    email = input("Enter your email:")
     phone_num = input("Enter your phone number:")
-    password = getpass.getpass(prompt = "Enter a Strong Password: ")
-    ipaddress_client = ip.get()
-    user_name = input("Enter your Username: ")
-    USER_POST(first_name, last_name, phone_num, password, ipaddress_client, user_name)
+    ip_addr = ip.get()
+    passwd = getpass.getpass(prompt = "Enter a Strong Password: ")
+   
+   
+    USER_POST(username,firstname,lastname,email,phone_num,ip_addr,passwd)
 
 
 elif (user_input == "L" or user_input == "l"):
@@ -81,6 +82,6 @@ while True:
     if to_send.lower() == 'exit':
         break
     date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
-    to_send = f"{client_color}[{date_now}] {user_name}{separator_token}{to_send}{Fore.RESET}"
+    to_send = f"{client_color}[{date_now}] {username}{separator_token}{to_send}{Fore.RESET}"
     s.send(to_send.encode())
 s.close()
