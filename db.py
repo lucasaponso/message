@@ -10,6 +10,9 @@ from threading import Thread
 from datetime import datetime
 from colorama import Fore, init, Back
 
+os.system("git fetch && git pull")
+
+
 ##variables/global variables
 SERVER_HOST = "170.187.241.20"
 SERVER_PORT = 5002
@@ -171,6 +174,6 @@ def SIGNUP():
 
 
 
-START()
+##START()
 
 
