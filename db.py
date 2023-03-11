@@ -8,10 +8,6 @@ from threading import Thread
 from datetime import datetime
 from colorama import Fore, init, Back
 
-
-
-
-
 SERVER_HOST = "170.187.241.20"
 SERVER_PORT = 5002
 separator_token = "<SEP>"
@@ -32,11 +28,67 @@ def SQL_CRED(sql, val):
     mydb.commit()
     print(mycursor.rowcount, "Success")
 
+
 def listen_for_messages():
     while True:
         message = s.recv(1024).decode()
         print("\n" + message)
 
+def LOGIN():
+    
+    login_username_input = input("Username:")
+    ##if username entered exists in coloumn of sql database give access
+    login_password_input = getpass.getpass(prompt = "Password: ")
+
+    if(login_username_input == "" or login_password_input == ""): 
+        print("please complete required fields!!")
+
+    else:
+        vals = (login_username_input,)
+        select_query = "SELECT * FROM `USERS` WHERE `username` = %s"
+        mydb = mysql.connector.connect(
+        host = "sql12.freemysqlhosting.net",
+        user = "sql12603798",
+        password = "FH2C6SMWLs",
+        database="sql12603798")
+        mycursor = mydb.cursor()
+        mycursor.execute(select_query, vals)
+        user1 = mycursor.fetchone()
+        if user1 is not None:
+            username = login_username_input
+            return True
+        else:
+            print("Username or Password is wrong. Or user does not exist.")
+            LOGIN()
+            return False
+          
+
+def SIGNUP():
+
+    global username
+    username = input("Enter your Username: ")
+    global firstname
+    firstname = input("Enter your First Name: ")
+    global lastname
+    lastname = input("Enter your Last Name:")
+    global email
+    email = input("Enter your email:")
+    global phone_num
+    phone_num = input("Enter your phone number:")
+    global ip_addr
+    ip_addr = ip.get()
+    global passwd
+    passwd = getpass.getpass(prompt = "Enter a Strong Password: ")
+    
+    
+    USER_POST(username,firstname,lastname,email,phone_num,ip_addr,passwd)
+
+
+
+
+
+LOGIN()
+username = "null"
 init()
 colors = [Fore.BLUE, Fore.CYAN, Fore.GREEN, Fore.LIGHTBLACK_EX, 
     Fore.LIGHTBLUE_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTGREEN_EX, 
@@ -48,30 +100,6 @@ s = socket.socket()
 print(f"[*] Connecting to {SERVER_HOST}:{SERVER_PORT}...")
 s.connect((SERVER_HOST, SERVER_PORT))
 print("[+] Connected.")
-
-
-
-user_input = input("Login(L)/Signup(S):")
-if (user_input == "S" or user_input == "s"):
-
-
-
-    username = input("Enter your Username: ")
-    firstname = input("Enter your First Name: ")
-    lastname = input("Enter your Last Name:")
-    email = input("Enter your email:")
-    phone_num = input("Enter your phone number:")
-    ip_addr = ip.get()
-    passwd = getpass.getpass(prompt = "Enter a Strong Password: ")
-   
-   
-    USER_POST(username,firstname,lastname,email,phone_num,ip_addr,passwd)
-
-
-elif (user_input == "L" or user_input == "l"):
-    print("Still under construction")
-    exit()
-
 
 t = Thread(target=listen_for_messages)
 t.daemon = True
@@ -85,3 +113,7 @@ while True:
     to_send = f"{client_color}[{date_now}] {username}{separator_token}{to_send}{Fore.RESET}"
     s.send(to_send.encode())
 s.close()
+
+
+
+

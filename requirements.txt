@@ -1,3 +1,5 @@
 public_ip
 mysql-connector-python
 colorama
+matplotlib
+pandas
